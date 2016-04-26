@@ -4,18 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>HTTP-Protocol hello | Shenyansycn Blog</title>
+  <title>HTTP-Protocol Hello | Shenyansycn Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+  <meta name="description" content="作者 : shenyansycnGithub : https://github.com/shenyansycnCSDN Blog : http://blog.csdn.net/shenyansycn此文同步在Github和CSND Blog上发布
+
+本系列课程主要面向有HTTP基础的开发者，需要了解基础知识的请访问这里。本章会一个HTTP请求的例子来作为接入点。在讲解例子前，我们需要做些准备工">
 <meta property="og:type" content="website">
-<meta property="og:title" content="HTTP-Protocol hello">
-<meta property="og:url" content="http://yoursite.com/HTTP-Protocol/HTTP-Protocol-hello.html">
+<meta property="og:title" content="HTTP-Protocol Hello">
+<meta property="og:url" content="http://yoursite.com/HTTP-Protocol/HTTP-Protocol-Hello.html">
 <meta property="og:site_name" content="Shenyansycn Blog">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-04-26T08:36:12.000Z">
+<meta property="og:description" content="作者 : shenyansycnGithub : https://github.com/shenyansycnCSDN Blog : http://blog.csdn.net/shenyansycn此文同步在Github和CSND Blog上发布
+
+本系列课程主要面向有HTTP基础的开发者，需要了解基础知识的请访问这里。本章会一个HTTP请求的例子来作为接入点。在讲解例子前，我们需要做些准备工">
+<meta property="og:image" content="https://raw.githubusercontent.com/shenyansycn/ImageBackup/master/Hello_Protocol_Postman_normal.png">
+<meta property="og:image" content="https://github.com/shenyansycn/ImageBackup/blob/master/Hello_Protocol_Postman_request.png?raw=true">
+<meta property="og:updated_time" content="2016-04-26T09:17:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HTTP-Protocol hello">
-<meta name="twitter:description">
+<meta name="twitter:title" content="HTTP-Protocol Hello">
+<meta name="twitter:description" content="作者 : shenyansycnGithub : https://github.com/shenyansycnCSDN Blog : http://blog.csdn.net/shenyansycn此文同步在Github和CSND Blog上发布
+
+本系列课程主要面向有HTTP基础的开发者，需要了解基础知识的请访问这里。本章会一个HTTP请求的例子来作为接入点。在讲解例子前，我们需要做些准备工">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/shenyansycn/ImageBackup/master/Hello_Protocol_Postman_normal.png">
   
     <link rel="alternative" href="/atom.xml" title="Shenyansycn Blog" type="application/atom+xml">
   
@@ -73,7 +82,7 @@
 						<li>Tags</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -167,8 +176,8 @@
       <div class="body-wrap"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/HTTP-Protocol/HTTP-Protocol-hello.html" class="article-date">
-  	<time datetime="2016-04-26T08:36:12.000Z" itemprop="datePublished">2016-04-26</time>
+      <a href="/HTTP-Protocol/HTTP-Protocol-Hello.html" class="article-date">
+  	<time datetime="2016-04-26T09:12:10.000Z" itemprop="datePublished">2016-04-26</time>
 </a>
     </div>
   
@@ -181,7 +190,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      HTTP-Protocol hello
+      HTTP-Protocol Hello
     </h1>
   
 
@@ -197,7 +206,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <a id="more"></a>
+<blockquote>
+<p>作者 : shenyansycn<br>Github : <a href="https://github.com/shenyansycn" target="_blank" rel="external">https://github.com/shenyansycn</a><br>CSDN Blog : <a href="http://blog.csdn.net/shenyansycn" target="_blank" rel="external">http://blog.csdn.net/shenyansycn</a><br>此文同步在<a href="https://github.com/shenyansycn/Blogs/blob/master/HTTP%20Protocol/HTTP%E5%8D%8F%E8%AE%AE%20%EF%BC%8D%20Hello%20HTTP%20Protocol.md" target="_blank" rel="external">Github</a>和<a href="http://blog.csdn.net/shenyansycn/article/details/51191801" target="_blank" rel="external">CSND Blog</a>上发布</p>
+</blockquote>
+<p>本系列课程主要面向有HTTP基础的开发者，需要了解基础知识的请访问<a href="https://zh.wikipedia.org/zh-cn/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE" target="_blank" rel="external">这里</a>。<br>本章会一个HTTP请求的例子来作为接入点。在讲解例子前，我们需要做些准备工作。包括：</p>
+<ul>
+<li><a href="https://www.google.com/chrome/browser/desktop/index.html?utm_source=google&amp;utm_medium=sem&amp;utm_campaign=1001342|ChromeWin10|GLOBAL|en|Hybrid|Text|BKWS~TopKWDS-Exact" target="_blank" rel="external">Chrome</a>：Google浏览器，支撑Postman插件</li>
+<li><a href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?utm_source=chrome-ntp-launcher" target="_blank" rel="external">Chrome Plugin Postman</a>：可以模拟HTTP请求，包括：GET、POST等</li>
+<li><a href="https://golang.org/" target="_blank" rel="external">Golang 1.6</a>：服务端开发语言，更好理解HTTP协议</li>
+<li><a href="https://www.jetbrains.com/idea/" target="_blank" rel="external">IntelliJ IDEA 15 CE</a>：服务端开发IDE，用户测试HTTP</li>
+<li><a href="https://github.com/go-lang-plugin-org" target="_blank" rel="external">IntelliJ IDEA 15 CE Plugin GO</a>：服务端用GO语言进行开发，需要这个插件。</li>
+</ul>
+<blockquote>
+<p>具体安装以及配置方法并不是本课程涉及的内容，请Google自行解决。</p>
+</blockquote>
+<h2 id="Postman"><a href="#Postman" class="headerlink" title="Postman"></a>Postman</h2><p><img src="https://raw.githubusercontent.com/shenyansycn/ImageBackup/master/Hello_Protocol_Postman_normal.png" alt=""></p>
+<p><a href="http://www.getpostman.com/" target="_blank" rel="external">Postman</a>官方的定位是“Modern software is built on APIs. Postman helps you develop APIs faster.<br>“。有Chrome App和Mac App，都是免费的。本系列课程主要用的就是测试API，通过测试API来学习HTTP Protocol。Postman还有其他重要的功能，详细信息可以看<a href="https://www.getpostman.com/docs/" target="_blank" rel="external">官方文档</a>。更深入的功能不在本系列文章中讨论。</p>
+<p>Postman相当于一个发送请求的客户端，在使用之前，我们需要创建一个服务端。本课程使用的是<a href="https://golang.org/" target="_blank" rel="external">Golang</a>语言，所用的IDE是<a href="https://www.jetbrains.com/idea/" target="_blank" rel="external">IntelliJ IDEA 15 CE</a>，通过<a href="https://github.com/go-lang-plugin-org" target="_blank" rel="external">IntelliJ IDEA 15 CE Plugin GO</a>插件来实现Golang语言的开发，具体开发配置请自行Google。测试代码在Golang语言和IDE相关配置完成的情况下可以直接使用。主要代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Start"</span>)</span><br><span class="line">	http.HandleFunc(<span class="string">"/appFeedback"</span>, appFeedback)</span><br><span class="line">	fmt.Println(<span class="string">"Linstenering"</span>)</span><br><span class="line">	err := http.ListenAndServe(<span class="string">":9898"</span>, nil)</span><br><span class="line">	<span class="keyword">if</span> err != nil &#123;</span><br><span class="line">		fmt.Println(<span class="string">"ListenerAndServer: "</span>, err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start server success"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"over"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>http.HandleFunc(&quot;/appFeedback&quot;, appFeedback)</code><br>是服务端访问的路径。<br><code>err := http.ListenAndServe(&quot;:9898&quot;, nil)</code><br>是服务端监听的接口<br><code>http.HandleFunc</code>第二个参数<code>appFeedback</code>是服务端处理请求的函数名。具体内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">func <span class="title">appFeedback</span><span class="params">(w http.ResponseWriter, r *http.Request)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//go process(w, r)</span></span><br><span class="line">	process(w, r)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">func <span class="title">process</span><span class="params">(w http.ResponseWriter, r *http.Request)</span> </span>&#123;</span><br><span class="line">	r.ParseForm()</span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"Method = "</span>, r.Method)</span><br><span class="line">	fmt.Println(<span class="string">"Host = "</span>, r.URL.Host)</span><br><span class="line">	fmt.Println(<span class="string">"path = "</span>, r.URL.Path)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"print URL Params"</span>)</span><br><span class="line">	<span class="keyword">for</span> k, v := range r.Form &#123;</span><br><span class="line">		fmt.Println(<span class="string">"	 "</span>, k, <span class="string">": "</span>, v)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"print Headers"</span>)</span><br><span class="line">	<span class="keyword">for</span> key, value := range r.Header &#123;</span><br><span class="line">		fmt.Println(<span class="string">"	"</span>, key, <span class="string">": "</span>, value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"scheme = "</span> + r.URL.Scheme)</span><br><span class="line">	fmt.Println(<span class="string">"UserAgent = "</span>, r.UserAgent())</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"print POST Body"</span>)</span><br><span class="line">	bodyData, _ := ioutil.ReadAll(r.Body)</span><br><span class="line">	fmt.Println(<span class="string">"	bodyData: "</span>, string(bodyData))</span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	fmt.Println(<span class="string">"------------------------------------------------------------------------------------------------------"</span>)</span><br><span class="line"></span><br><span class="line">	var respone AppFeedbackRespone</span><br><span class="line">	respone.Message = <span class="string">"http Method is "</span> + r.Method</span><br><span class="line">	respone.State = <span class="string">"1"</span></span><br><span class="line">	b, err := json.Marshal(respone)</span><br><span class="line">	var backString string = string(b)</span><br><span class="line">	fmt.Println(<span class="string">"back String = "</span>, backString)</span><br><span class="line">	<span class="keyword">if</span> (err != nil) &#123;</span><br><span class="line">		fmt.Println(<span class="string">"json err = "</span>, err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		w.Write(b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调试信息都是用英文标示，方便大家阅读和调试。在服务端调用起来后，我们就可以通过Postman访问服务端来测试HTTP协议了。</p>
+<p>在Postman的<code>Enter request URL</code>的地方填写<code>http://localhost:9898/appFeedback</code>，点击<code>send</code>，返回内容如下图：</p>
+<p><img src="https://github.com/shenyansycn/ImageBackup/blob/master/Hello_Protocol_Postman_request.png?raw=true" alt=""></p>
+<p>服务端打印的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Linstenering</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">Method =  GET</span><br><span class="line">Host =  </span><br><span class="line">path =  /appFeedback</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">print URL Params</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">print Headers</span><br><span class="line">	 Connection :  [keep-alive]</span><br><span class="line">	 Cache-Control :  [no-cache]</span><br><span class="line">	 User-Agent :  [Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Postman/4.1.1 Chrome/47.0.2526.73 Electron/0.36.2 Safari/537.36]</span><br><span class="line">	 Postman-Token :  [53487ea8-7319-6d96-3a1e-4b0a0a497603]</span><br><span class="line">	 Accept :  [*/*]</span><br><span class="line">	 Accept-Encoding :  [gzip, deflate]</span><br><span class="line">	 Accept-Language :  [zh-CN]</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">scheme = </span><br><span class="line">UserAgent =  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Postman/4.1.1 Chrome/47.0.2526.73 Electron/0.36.2 Safari/537.36</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">print POST Body</span><br><span class="line">	bodyData:  </span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">back String =  &#123;&quot;state&quot;:&quot;1&quot;,&quot;message&quot;:&quot;http Method is GET&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>OK，一个简单的HTTP请求的客户端和服务端的Demo就是这些了，上面相关信息具体含义，以后课程逐步来详细讲解。<br>服务端的代码在<a href="https://github.com/shenyansycn/Golang_Http_Demo" target="_blank" rel="external">这里</a>，main.go的文件。</p>
+<p>© 2016，<a href="https://github.com/shenyansycn" target="_blank" rel="external">Shenyansycn</a>。 版权所有。</p>
+
       
     </div>
     
@@ -233,7 +270,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="undefined" data-title="HTTP-Protocol hello" data-url="http://yoursite.com/HTTP-Protocol/HTTP-Protocol-hello.html"></div>
+	<div class="ds-thread" data-thread-key="undefined" data-title="HTTP-Protocol Hello" data-url="http://yoursite.com/HTTP-Protocol/HTTP-Protocol-Hello.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
