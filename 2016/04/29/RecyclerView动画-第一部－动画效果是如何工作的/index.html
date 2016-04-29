@@ -1,0 +1,750 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RecyclerView动画 第一部－动画效果是如何工作的">
+<meta property="og:url" content="http://shenyansycn.github.io/2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/index.html">
+<meta property="og:site_name" content="Shenyansycn Blog">
+<meta property="og:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:image" content="http://img.blog.csdn.net/20151229105047003">
+<meta property="og:image" content="http://img.blog.csdn.net/20151229105018461">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104165238477">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104165428678">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104165622148">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104165758583">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104165955801">
+<meta property="og:image" content="http://img.blog.csdn.net/20160104170057136">
+<meta property="og:updated_time" content="2016-04-29T08:35:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RecyclerView动画 第一部－动画效果是如何工作的">
+<meta name="twitter:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20151229105047003">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RecyclerView动画 第一部－动画效果是如何工作的 | Shenyansycn Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shenyansycn Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Project Manager & Android Developer</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RecyclerView动画 第一部－动画效果是如何工作的
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T16:34:09+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术文章翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章翻译</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的<a href="https://github.com/hehonghui/android-tech-frontier" target="_blank" rel="external">开源项目</a>。</p>
+<a id="more"></a>
+<blockquote>
+<ul>
+<li>原文链接 : <a href="http://www.birbit.com/recyclerview-animations-part-1-how-animations-work/" target="_blank" rel="external">RecyclerView Animations Part 1 – How Animations Work</a></li>
+<li>原文作者 : <a href="http://www.birbit.com/" target="_blank" rel="external">Yiğit Boyar</a></li>
+<li>译文出自 : <a href="http://www.devtf.cn" target="_blank" rel="external">开发技术前线 www.devtf.cn</a></li>
+<li>译者 : <a href="https://github.com/shenyansycn" target="_blank" rel="external">shenyansycn</a> </li>
+</ul>
+</blockquote>
+<p>LisetView是Android框架中最流程的控件之一。它有很多功能，然而它是很复杂的，修改难度很大。随着用户体验的发展和手机变的越来越快，它的局限性使它的特色黯然失色。</p>
+<p>在Lollipop中，Android团队决定发布一个新的控件，使得该控件的不同的行为更容易实现。以下的改变会很容易控制：</p>
+<blockquote>
+<ul>
+<li>items如何被展现</li>
+<li>动画效果</li>
+<li>item修饰</li>
+<li>回收策略</li>
+<li>…</li>
+</ul>
+</blockquote>
+<p>极大的灵活性也伴随着一个巨大架构的复杂性。同样也有更多需要学习。</p>
+<p>在这篇文章中，我要深入RecyclerView的内部，特别在<strong>动画如何实现</strong>上。</p>
+<p>在Honeycomb上，Android框架引进了<a href="http://developer.android.com/reference/android/animation/LayoutTransition.html" target="_blank" rel="external">LayoutTransition</a>，ViewGroup内部动画的一个很简单的方法。它工作原理是布局改变前和改变后分别生成两个ViewGroup快照，然后在这两个状态间创建一个动画效果。这个过程和Adapter中RecyclerView的动画非常相似。</p>
+<p><em>LayoutTransition例子：</em></p>
+<p><img src="http://img.blog.csdn.net/20151229105047003" alt="LayoutTransirion example"></p>
+<p>不幸的，List有一个主要的区别使得LayoutTransitions不适合它们的动画，list中的item和ViewGroup中的不一样。处理“items”动画机制和动态显示“views”的内容是很重要的差别。</p>
+<p>在一个标准的ViewGroup中，如果一个View是新被添加到视图层的，它可以被认为是一个新加入的View，因此可以设置相应的动态效果（例如，淡入）。对于集合，这是不同的。例如，在Adapter中一个item的View变为可见仅是因为之前有一个item被移除。在这个情况下，已经在列表中的运行淡入的动画效果的item会被误认为是一个新的view，因为它刚被看见。RecyclerView知道item是否是新的，但是不知道如果item<strong>不是</strong>新的它在哪。同样对于消失中的View也是一样，如果没有被Adapter移除，RecyclerView不知道View去哪里了。</p>
+<p><em>对于列表LayoutTransition是无效的：</em></p>
+<p><img src="http://img.blog.csdn.net/20151229105018461" alt="LayoutTransirion bad example"></p>
+<p>为了修复这个问题，RecuclerView会问LayoutManager新View的之前的位置。虽然这会工作，它将会需要LayoutManager结尾的一些统计，对于更复杂的LauoutManager可能不需要繁琐的计算。</p>
+<p>RecyclerView控制item显示和消失动画的方式（就是说，view的显示和消失的动画是指它仍然在list中）是依赖LayoutManager处理layout逻辑的预测性。一方面，RecyclerView需要知道变化之前view被展示在哪一层。另一方面，RecyclerView想要知道变化之后view被展示在哪一层，如果LayoutManager展示items出现了问题，则item不可见。</p>
+<p>为了LayoutManager更容易的提供这个信息，RecyclerView使用两个层来配合动画效果。具体如下描述：</p>
+<blockquote>
+<ul>
+<li><p>在第一个层中的变化(<strong>preLayout</strong>)，RecyclerView询问LayoutManager当前层之前状态的更多信息。比如上面的例子，就好像请求“‘C’被移除了”。LayoutManager正常执行‘C’被移除的操作，用新的View填补‘C’的空档。</p>
+<p>出色的是RecyclerView仍然知道‘C’还在Adapter中。比如，当LayoutManager想要知道位置为‘<strong>2</strong>’的View是什么时，RecyclerView会返回‘C’(<code>getViewForPosition(2) == View(&#39;C&#39;)</code>)。如果问位置为‘<strong>4</strong>’的View是什么时，会返回来‘E’（虽然‘D’是Adapter第四个元素）。返回View的有一个<strong>isItemRemoved</strong>方法，LayoutManager可以通过检查这个方法来判断是否是消失的View。</p>
+</li>
+<li><p>在第二个层中的变化（<strong>postLayout</strong>），RecycleView请求LayoutManager布置它自己的item。这时，‘C’已经不在Adapter中了。<code>getViewForPosition(2)</code>会返回‘D’，<code>getViewForPosition(4)</code>会返回‘F’。</p>
+<p>  记住，‘C’已经被Adapter移除了。但是因为RecyclerView保留了它的引用，它表现的好像‘C’仍然存在。换句话说，RecyclerView做了LayoutManager统计的工作。</p>
+</li>
+</ul>
+</blockquote>
+<p>每次调用LayoutManager中的<code>onLayoutChildren</code>的时候，它会<strong>临时拆开</strong>所有的View并从头开始布局。没有改变的View会被从废弃的缓存中返回，因此它们还是有效的。这使得重新布局相当高效。</p>
+<p><em>LinearLayoutManager之前的布局结果：（红色框范围内对用户是可见的）</em></p>
+<p><img src="http://img.blog.csdn.net/20160104165238477" alt="LinearLayoutManager pre layout"></p>
+<p><em>LinearLayoutManager之后的布局结果</em></p>
+<p><img src="http://img.blog.csdn.net/20160104165428678" alt="LinearLayoutManager post layout"></p>
+<p>这两个布局变化后，RecyclerView知道View来自哪里所以能运行正确的动画效果。</p>
+<p><img src="http://img.blog.csdn.net/20160104165622148" alt="Predictive Animation"></p>
+<p><em>你可能会问</em>：‘C’没有被LayoutManager展示，那为什么还会可见？</p>
+<p>要清楚，在pre-layout中被LayoutManager展示的‘C’是因为它看起来是在Adapter中。事实是在post-layout中不被LayoutManager展示的‘C’已经不再Adapter中存在了。也<strong>就说</strong>是‘C’不再是LayoutManager的孩子，但对于RecyclerView<strong>不</strong>是这样的。当LayoutManager移除了View，如果要实现动画效果，RecyclerView会使他做为孩子一直存在（所以动画会正确的显示）。更多的细节会在<a href="http://www.birbit.com/recyclerview-animations-part-2-behind-the-scenes/" target="_blank" rel="external">Part 2</a>。</p>
+<p><strong>消失的Items</strong></p>
+<p>通过了两个布局过程的变化，RecyclerView可以正确的执行新View的动画效果。但是，消失的View存在另一个问题。考虑一下新添加的元素在list什么位置，会把一些元素移出可见区域。它看起来像LayoutTransitions：</p>
+<p><img src="http://img.blog.csdn.net/20160104165758583" alt="Add Animation Failure"></p>
+<p>当‘X’被添加在‘A’后，它把‘F’移出了可见区域。因为LayoutManager没有展示‘F’，LayoutTransition认为它已经被一个淡出的动画效果移出UI。实际上，‘F’仍然在Adapter中只是被移出了可见区域。</p>
+<p>为了解决这个问题，RecyclerView给LayoutManager提供了一个额外的API。在<strong>postLayout</strong>变化的末尾，LayoutManager会调用<a href="https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Recycler.html#getScrapList%28%29" target="_blank" rel="external">getScrapList</a>获得列表中的View（没有被LayoutManager展示，但仍然在Adapter中）。然后，它展示了这些view，好像RecyclerView的规模大到足以展示它们。</p>
+<p><em>LinearLayoutManager之后的布局结果：（红色框范围内对用户是可见的）</em></p>
+<p><img src="http://img.blog.csdn.net/20160104165955801" alt="LinearLayoutManager post layout"></p>
+<p>一个重要的细节是，因为这些View在动画效果结束后就不是必需的了，LayoutManager会调用<strong>addDisappearingView</strong>来代替<code>addView</code>。这就告诉了RecyclerView这个View的动画效果完成后就被移除。RecyclerView会把这个View加入到隐藏View的列表中，所以<code>postLayout</code>方法返回时在LayoutManager子View的列表中是不可见的。这样，LayoutManager就会忽视它。</p>
+<p><img src="http://img.blog.csdn.net/20160104170057136" alt="Predictive Add Animation"></p>
+<p>首先，至少对于LinearLayoutManager来说，你可能认为它会计算View来自哪里和要去哪里（如果消失），这样就不需要两次布局计算。令人遗憾的是，许多类型的Adapter在同一个布局中发生变化时会有很多意外情况。除此之外，对于更复杂的LayoutManager，它不总是简单的计算一个item放在什么地方（例如StaggeredGridLayout）。这个方法会删除来自LayoutManager所有的负担，它可以很容易的支持一些适当的动画效果。</p>
+<p>到目前为止，我的主要想法是RecyclerView如何预测动画的运行。实际上有很多简单的实现（对于LayoutManager来说）。你可以在<a href="http://www.birbit.com/recyclerview-animations-part-2-behind-the-scenes/" target="_blank" rel="external">Part 2 - 幕后</a>中了解更多。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/29/Android中调试RxJava/" rel="next" title="Android中调试RxJava">
+                <i class="fa fa-chevron-left"></i> Android中调试RxJava
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/29/RecyclerView动画-第二部－幕后/" rel="prev" title="RecyclerView动画 第二部－幕后">
+                RecyclerView动画 第二部－幕后 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/"
+     data-title="RecyclerView动画 第一部－动画效果是如何工作的"
+     data-content=""
+     data-url="http://shenyansycn.github.io/2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/"
+           data-title="RecyclerView动画 第一部－动画效果是如何工作的" data-url="http://shenyansycn.github.io/2016/04/29/RecyclerView动画-第一部－动画效果是如何工作的/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/3362795?v=3&s=460"
+               alt="似衡" />
+          <p class="site-author-name" itemprop="name">似衡</p>
+          <p class="site-description motion-element" itemprop="description">财上平如水，人中直似衡</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shenyansycn" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">似衡</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shenyansycn"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

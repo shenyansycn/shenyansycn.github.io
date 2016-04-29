@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 权限 - 第一篇">
+<meta property="og:url" content="http://shenyansycn.github.io/2016/04/29/权限-第一篇/index.html">
+<meta property="og:site_name" content="Shenyansycn Blog">
+<meta property="og:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:image" content="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Icon_no_permission.png?w=240">
+<meta property="og:image" content="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Part1-lollipop.png?resize=624%2C468">
+<meta property="og:image" content="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Part1-marshmallow.png?resize=624%2C468">
+<meta property="og:updated_time" content="2016-04-29T09:08:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 权限 - 第一篇">
+<meta name="twitter:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta name="twitter:image" content="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Icon_no_permission.png?w=240">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android 权限 - 第一篇 | Shenyansycn Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shenyansycn Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Project Manager & Android Developer</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 权限 - 第一篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T16:50:45+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术文章翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章翻译</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/29/权限-第一篇/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/29/权限-第一篇/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的<a href="https://github.com/hehonghui/android-tech-frontier" target="_blank" rel="external">开源项目</a>。</p>
+<a id="more"></a>
+<blockquote>
+<ul>
+<li>原文链接 : <a href="https://blog.stylingandroid.com/permissions-part-1/" target="_blank" rel="external">Permissions – Part 1</a></li>
+<li>原文作者 : <a href="https://blog.stylingandroid.com/" target="_blank" rel="external">Mark Allison</a></li>
+<li>译文出自 : <a href="http://www.devtf.cn" target="_blank" rel="external">开发技术前线 www.devtf.cn</a></li>
+<li>译者 : <a href="https://github.com/shenyansycn" target="_blank" rel="external">shenyansycn</a> </li>
+</ul>
+</blockquote>
+<p>在Marshmallow（棉花糖，Android6.0版本）中Android添加了一个新的权限模块，需要开发者在授权的时候做一些不同的处理。在这里系列文章中，我们从技术角度看下如何处理请求的权限和如何提供流畅的用户体验。</p>
+<p><img src="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Icon_no_permission.png?w=240" alt="Icon_no_permission"> </p>
+<p>在我们开始前需要指出的是，App需要的权限集中下以下两部分：</p>
+<ul>
+<li>App的操作核心－没有这些核心权限，App不能正确的运行；</li>
+<li>不是必须的权限。</li>
+</ul>
+<p>例如，一个相机App，CAMERA权限是核心功能的一部分 － 不能处理任何图片的相机App是没用的。然而，这里有额外的功能，比如，标记图片所在的位置会需要ACCESS_FINE_LOCATION权限，这是一个非常好的功能，但App没有这个权限也可以运行。</p>
+<p>我们的系列文章是以一个应用开始的，有两个权限是我们无论如何都需要使用的：<strong>RECORD_AUDIO</strong> 和 <strong>MODIFY_AUDIO_SETTINGS</strong>。为了获得这些权限，我们需要在Mainfest文件中声明它们：</p>
+<p>AndroidManifest.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line">&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"</span><br><span class="line">  xmlns:tools="http://schemas.android.com/tools"</span><br><span class="line">  package="com.stylingandroid.permissions"&gt;</span><br><span class="line"></span><br><span class="line">  &lt;uses-permission android:name="android.permission.RECORD_AUDIO" /&gt;</span><br><span class="line">  &lt;uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /&gt;</span><br><span class="line"></span><br><span class="line">  &lt;application</span><br><span class="line">    android:allowBackup="false"</span><br><span class="line">    android:fullBackupContent="false"</span><br><span class="line">    android:icon="@mipmap/ic_launcher"</span><br><span class="line">    android:label="@string/app_name"</span><br><span class="line">    android:supportsRtl="true"</span><br><span class="line">    android:theme="@style/AppTheme.NoActionBar"</span><br><span class="line">    tools:ignore="GoogleAppIndexingWarning"&gt;</span><br><span class="line"></span><br><span class="line">    &lt;activity android:name=".MainActivity" /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;activity</span><br><span class="line">      android:name=".PermissionsActivity"</span><br><span class="line">      android:label="@string/title_activity_permissions"</span><br><span class="line">      android:theme="@style/AppTheme.NoActionBar"&gt;</span><br><span class="line">      &lt;intent-filter&gt;</span><br><span class="line">        &lt;action android:name="android.intent.action.MAIN" /&gt;</span><br><span class="line"></span><br><span class="line">        &lt;category android:name="android.intent.category.LAUNCHER" /&gt;</span><br><span class="line">      &lt;/intent-filter&gt;</span><br><span class="line">    &lt;/activity&gt;</span><br><span class="line">  &lt;/application&gt;</span><br><span class="line"></span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+<p>从Android Api 1.0版本开始，这就是标准的权限声明方法。然而，当把targetSdkVersion设置为23或更高，我们就需要在运行时请求需要的权限。这真的是重要的，因为已经有很多这样的例子了，开发者无意的设置targetSdkVersion为最新版本，然后正常运行的时候奔溃了，因为在运行时他们没有实现请求权限所必需的代码。更多问题中的一个是，当你一旦发布一个面向API23或更高的应用到GooglePlay上时，你不能再次发布一个面向低版本的APK。</p>
+<p>另一个值得提到的事情是有一些专门用于运行时权限请求处理的库。这些库在质量和实用性都是有差异的，但是我认为使用这样的库前有必要了解底层实现原理，否则你会被问题搞死，因为你不知道你选择的库实际上都做了什么。这是这个系列文章的主要目的。</p>
+<p>我们实际需要的两个权限分为两个不同的类别：<strong>RECORD_AUDIO</strong>是一个需要特别注意的危险权限，<strong>MODIFY_AUDIO_SETTINGS</strong>是一标准权限。一个危险的权限可能会影响用户安全或隐私。而一个需要访问App的外部资源的标准权限，对于用户隐私来说基本没有风险。标准权限会被系统自动授权，而危险权限在运行时需要用户明确的授权。</p>
+<p>我们首先需要做的事情是判断我们需要的权限是否已经被授权了。在API 23 Context中新添加了一些方法用于检测是否特殊的权限已经被授予。然而，一般都是用ContextCompat替代Context，包括你自己的API-level检测：</p>
+<p>PermissionChecker.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PermissionsChecker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Context context;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PermissionsChecker</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">lacksPermissions</span><span class="params">(String... permissions)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (String permission : permissions) &#123;</span><br><span class="line">            <span class="keyword">if</span> (lacksPermission(permission)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">lacksPermission</span><span class="params">(String permission)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这实际上是很简单的－<code>ContextCompat#checkSelfPermission</code>方法要么返回<strong>PackageManager.PERMISSION_DENIED</strong>要么返回<strong>PackageManager.PERMISSION_GRANTED</strong>。我添加了更进一步逻辑判断，检测是否没有被授予任何所需要的权限。</p>
+<p>需要重复说的是这里的ContextCompat为我们做了什么。在Marshmallow之前不支持新的运行时授权的设备上，<code>checkSelfPermission()</code>方法总是返回<strong>PackageManger.PERMISSION_GRANTED</strong>－在比较老的OS层这个权限被默认授予，所以在Manifest文件中声明后，我们仅用这一个方法调用可以在所有的OS层都工作，并且我们在代码中不必写任何API-level的检测。 </p>
+<p>以防万一你会疑惑我为什么为这个单独创建了一个类，因为过一会我需要在App中的所有Activity都用这个检测，所以把检测逻辑从Activity中分离出来会使我们有更少重复的代码和提高可维护性。</p>
+<p>因此在Activiy中使用这个我们仅用Activity所需要的权限列表做为参数的调用即可：</p>
+<p>MainActivity.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] PERMISSIONS = <span class="keyword">new</span> String[] &#123;Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        PermissionsChecker checker = <span class="keyword">new</span> PermissionsChecker(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (checker.lacksPermissions(PERMISSIONS)) &#123;</span><br><span class="line">            Snackbar.make(toolbar, R.string.no_permissions, Snackbar.LENGTH_INDEFINITE).show();</span><br><span class="line">        &#125;</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上这是相当简单的。</p>
+<p>这个可以原样运行在Marshamllow（Android6.0）之前的设备上：</p>
+<p><img src="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Part1-lollipop.png?resize=624%2C468" alt="Part1-lollipop"></p>
+<p>但是，在Marshmallow（Android6.0）和之后的版本对于任何丢失的权限我们还没有处理－我们仅是显示了一个Snackbar：</p>
+<p><img src="https://i0.wp.com/blog.stylingandroid.com/wp-content/uploads/2015/12/Part1-marshmallow.png?resize=624%2C468" alt="Part1-marshmallow"></p>
+<p>下一章，我们更会进行更复杂的请求丢失的权限处理。</p>
+<p>这篇文章的源码在 <a href="https://github.com/StylingAndroid/Permissions/tree/Part1" target="_blank" rel="external">这里</a></p>
+<p>© 2016, <a href="https://blog.stylingandroid.com/" target="_blank" rel="external">Mark Allison</a>. All rights reserved.</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/29/Android-Studio提示和技巧/" rel="next" title="Android Studio提示和技巧">
+                <i class="fa fa-chevron-left"></i> Android Studio提示和技巧
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/29/权限-第二篇/" rel="prev" title="Android 权限 - 第二篇">
+                Android 权限 - 第二篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/29/权限-第一篇/"
+     data-title="Android 权限 - 第一篇"
+     data-content=""
+     data-url="http://shenyansycn.github.io/2016/04/29/权限-第一篇/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/29/权限-第一篇/"
+           data-title="Android 权限 - 第一篇" data-url="http://shenyansycn.github.io/2016/04/29/权限-第一篇/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/3362795?v=3&s=460"
+               alt="似衡" />
+          <p class="site-author-name" itemprop="name">似衡</p>
+          <p class="site-description motion-element" itemprop="description">财上平如水，人中直似衡</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shenyansycn" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">似衡</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shenyansycn"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

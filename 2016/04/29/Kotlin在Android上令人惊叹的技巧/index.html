@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin在Android上令人惊叹的技巧">
+<meta property="og:url" content="http://shenyansycn.github.io/2016/04/29/Kotlin在Android上令人惊叹的技巧/index.html">
+<meta property="og:site_name" content="Shenyansycn Blog">
+<meta property="og:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:image" content="https://camo.githubusercontent.com/bfbcd3f98015f75f6999b07196a973bb3e3af447/687474703a2f2f69312e77702e636f6d2f616e746f6e696f6c656976612e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031362f30322f6b6f746c696e5f66656174757265642e6a70673f7a6f6f6d3d3226726573697a653d373935253243313835">
+<meta property="og:updated_time" content="2016-04-29T09:07:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin在Android上令人惊叹的技巧">
+<meta name="twitter:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/bfbcd3f98015f75f6999b07196a973bb3e3af447/687474703a2f2f69312e77702e636f6d2f616e746f6e696f6c656976612e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031362f30322f6b6f746c696e5f66656174757265642e6a70673f7a6f6f6d3d3226726573697a653d373935253243313835">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Kotlin在Android上令人惊叹的技巧 | Shenyansycn Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shenyansycn Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Project Manager & Android Developer</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kotlin在Android上令人惊叹的技巧
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T16:58:10+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术文章翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章翻译</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/29/Kotlin在Android上令人惊叹的技巧/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/29/Kotlin在Android上令人惊叹的技巧/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的<a href="https://github.com/hehonghui/android-tech-frontier" target="_blank" rel="external">开源项目</a>。</p>
+<a id="more"></a>
+<blockquote>
+<ul>
+<li>原文链接 : <a href="http://antonioleiva.com/kotlin-awesome-tricks-for-android/" target="_blank" rel="external">Kotlin awesome tricks for Android</a></li>
+<li>原文作者 : <a href="http://antonioleiva.com/" target="_blank" rel="external">Antonio Leiva</a></li>
+<li>译文出自 : <a href="http://www.devtf.cn" target="_blank" rel="external">开发技术前线 www.devtf.cn</a></li>
+<li>译者 : <a href="https://github.com/shenyansycn" target="_blank" rel="external">shenyansycn</a> </li>
+</ul>
+</blockquote>
+<p><img src="https://camo.githubusercontent.com/bfbcd3f98015f75f6999b07196a973bb3e3af447/687474703a2f2f69312e77702e636f6d2f616e746f6e696f6c656976612e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031362f30322f6b6f746c696e5f66656174757265642e6a70673f7a6f6f6d3d3226726573697a653d373935253243313835" alt=""></p>
+<p>我已经在这个<a href="http://antonioleiva.com/kotlin" target="_blank" rel="external">Blog</a>里讨论了很多Kotlin了，现在<a href="https://medium.com/google-developers/kotlin-android-a-brass-tacks-experiment-part-1-3e5028491bcc#.kohpnch41" target="_blank" rel="external">Google</a>也正在讨论Kotlin，<a href="http://blog.jetbrains.com/kotlin/2016/02/kotlin-1-0-release-candidate-is-out/" target="_blank" rel="external">Kotlin 1.0 RC</a> 已经发布了，毫无疑问，Kotlin不仅仅是Android的一个替代选择。Kotlin就在这里，我推荐你开始学习它。</p>
+<h2 id="在Android上我从哪里开始学习Kotlin？"><a href="#在Android上我从哪里开始学习Kotlin？" class="headerlink" title="在Android上我从哪里开始学习Kotlin？"></a>在Android上我从哪里开始学习Kotlin？</h2><p>这里已经有一些信息了，但是如果你想要真正的关注和快速学习，我推荐你这些资源：</p>
+<ul>
+<li><p><a href="http://kotlinlang.org/docs/reference/" target="_blank" rel="external">Kotlin reference</a>：如果你想深入了解这个语言的细节，这里是你能找到的最好的地方。我所知道关于这个语言的最好参考文献之一。</p>
+</li>
+<li><p><a href="http://antonioleiva.com/kotlin" target="_blank" rel="external">This blog</a>：这个链接是我整理的所有关于Kotlin的文章的地方。你不应该错过它，文章属于初级和中级。</p>
+</li>
+<li><p><a href="http://antonioleiva.com/kotlin-android-developers-book/" target="_blank" rel="external"><strong>Kotlin for Android Developers, The book</strong></a>：如果你想快速和持续的学习，这本书是最好的方法。如果你已经了解了Andriod，这将是一个在你的项目中使用kotlin的快速途径。我已经编写很长一段时间了，当新版本发布的时候我就会更新它。已经更新到了Kotlin 1.0 RC。除此之外如果你<a href="http://antonioleiva.com/kotlin-android-developers-book/" target="_blank" rel="external">订阅了这个列表</a>，你将收到<strong>免费的头5个章节和这本书末尾显示的一个购买折扣</strong>。</p>
+</li>
+</ul>
+<h2 id="展示这个技巧"><a href="#展示这个技巧" class="headerlink" title="展示这个技巧"></a>展示这个技巧</h2><p>在我要讲解之前，有一个要说明的是Kotlin能给你带来简化的Android代码。这里有一组没有特定顺序的独立的例子。</p>
+<h3 id="简洁和趣味的编写点击监听事件"><a href="#简洁和趣味的编写点击监听事件" class="headerlink" title="简洁和趣味的编写点击监听事件"></a>简洁和趣味的编写点击监听事件</h3><p>Java 7上编写监听和回调事件非常繁琐的原因是缺少了lambdas。Kotlin有非常好的lambdas和<strong>与Java库有非常好的兼容性</strong>。用lambda一个方法即可映射接口。你可以这么做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myButton.setOnClickListener &#123; navigateToDetail() &#125;</span><br></pre></td></tr></table></figure>
+<p>这就是所有。</p>
+<h3 id="为什么layout要如此麻烦的inflate？再也不是了！"><a href="#为什么layout要如此麻烦的inflate？再也不是了！" class="headerlink" title="为什么layout要如此麻烦的inflate？再也不是了！"></a>为什么layout要如此麻烦的inflate？再也不是了！</h3><p>当你在Adapter中实例化时，你需要inflate一个layout，你会这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LayoutInflater.from(parent.getContext()).inflate(R.id.my_layout, parent, <span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<p>为什么父类不能inflate它自己的layout？好了，用Kotlin你可以。可以创建一个扩展的方法为你所用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View &#123;</span><br><span class="line">    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ViewGroup</code>现在有了一个新的<code>inflate</code>方法，接受参数是一个layout资源和可选的<code>attachToRoot</code>。通过传入不同的值，你可以创建同一个函数的很多不同版本，但不需要重载函数。现在可以这么做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">parent.inflate(R.layout.my_layout)</span><br><span class="line">parent.inflate(R.layout.my_layout, true)</span><br></pre></td></tr></table></figure>
+<h3 id="ImageView-加载图片"><a href="#ImageView-加载图片" class="headerlink" title="ImageView, 加载图片!"></a>ImageView, 加载图片!</h3><p><code>ImageView</code>不能直接从网络上加载图片。我们有一些创建自定义view的库，比如：<code>NetworkImageView</code>，但这要求你使用继承，有时这会导致问题。现在我们知道我们可以在任何类上添加函数了，为什么不这样做呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fun ImageView.loadUrl(url: String) &#123;</span><br><span class="line">    Picasso.with(context).load(url).into(this)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在你可以使用这个函数了，但神奇的是这个函数的本身。你现在有超级类<code>ImageView</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imageView.loadUrl(&quot;http://....&quot;)</span><br></pre></td></tr></table></figure>
+<p>很好。</p>
+<h3 id="令人厌恶的菜单switches…再也不了！"><a href="#令人厌恶的菜单switches…再也不了！" class="headerlink" title="令人厌恶的菜单switches…再也不了！"></a>令人厌恶的菜单switches…再也不了！</h3><p>当重写<code>onOptionsItemSelected</code>时，我们通常创建一个设置好分支的<code>switch</code>，一般都返回true，最后都调用super。如果在这些action中有drawer设置，这是很糟糕的，因为你还要关闭这个drawer。一个可替代的方案（仅说明你能做什么，不是说这是最好的解决方案）是可以创建一个扩展的方法来做这些事情。</p>
+<p>首先，我们创建一个<code>consume</code>方法，意思是处理了这个event（返回true），接收一个lambda做我们分支要做的工作。对于drawer也一样可以这么做。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) &#123;</span><br><span class="line">    R.id.action_settings -&gt; consume &#123; navigateToSettings() &#125;</span><br><span class="line">    R.id.nav_camera -&gt; drawer.consume &#123; navigateToCamera() &#125;</span><br><span class="line">    R.id.nav_gallery -&gt; drawer.consume &#123; loadGallery() &#125;</span><br><span class="line">    R.id.nav_slideshow -&gt; drawer.consume &#123; loadSlideshow() &#125;</span><br><span class="line">    else -&gt; super.onOptionsItemSelected(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这些方法看起来是如何的？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">inline fun consume(f: () -&gt; Unit): Boolean &#123;</span><br><span class="line">    f()</span><br><span class="line">    return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于drawer也类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inline fun DrawerLayout.consume(f: () -&gt; Unit): Boolean &#123;</span><br><span class="line">    f()</span><br><span class="line">    closeDrawers()</span><br><span class="line">    return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好消息是这些函数是<code>内联的</code>，意思是编译时这个方法会被方法的代码替代，所以在调用的地方编写代码是高效的。</p>
+<h3 id="Snacks和toasts很像…-但更不好用"><a href="#Snacks和toasts很像…-但更不好用" class="headerlink" title="Snacks和toasts很像… 但更不好用"></a>Snacks和toasts很像… 但更不好用</h3><p>这个代码显示了来自design support library的snack比toasts更不好用。但在Kotlin中我们可以做的更好。可以像下边这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">view.snack(&quot;This is my snack&quot;)</span><br><span class="line">view.snack(&quot;This snack is short&quot;, Snackbar.LENGTH_SHORT)</span><br></pre></td></tr></table></figure>
+<p>如果我们有一个action怎么办？别急，Kotlin这样解决：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">view.snack(&quot;Snack message&quot;) &#123;</span><br><span class="line">    action(&quot;Action&quot;) &#123; toast(&quot;Action clicked&quot;) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以为了被困扰任何事情创建小的DSLs。我们需要什么？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -&gt; Unit) &#123;</span><br><span class="line">    val snack = Snackbar.make(this, message, length)</span><br><span class="line">    snack.f()</span><br><span class="line">    snack.show()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个方法是创建snackbar，让这个snackbar之行我们提供的扩展方法，并显示自己。</p>
+<p>这个方法会创建Snackbar action。这个action方法看起来是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fun Snackbar.action(action: String, color: Int? = null, listener: (View) -&gt; Unit) &#123;</span><br><span class="line">    setAction(action, listener)</span><br><span class="line">    color?.let &#123; setActionTextColor(color) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你甚至可以指定这个action的文字的颜色。如果你没有设置，默认值是null，最后一行代码决定如何做。你不喜欢最后一行代码？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">color?.let &#123; setActionTextColor(color) &#125;</span><br></pre></td></tr></table></figure>
+<p> <code>let</code>内的代码只有<code>color</code>不为空的时候才会被执行。</p>
+<h3 id="现在我没有context…但谁关心呢？"><a href="#现在我没有context…但谁关心呢？" class="headerlink" title="现在我没有context…但谁关心呢？"></a>现在我没有context…但谁关心呢？</h3><p>在Java中，例如当我们查找一个view时，我们必须等到activity的布局文件加载完毕才能赋值给一个变量。</p>
+<p>同样的也发生在context身上。如果一个object依赖context，你需要在class开始的地方声明它，然后在<code>onCreate</code>时候赋值。</p>
+<p>用Kotlin委托，你仅需要委托一个值给<code>lazy</code>委托，当第一次被使用的时候才会执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">override val toolbar by lazy &#123; find&lt;Toolbar&gt;(R.id.toolbar) &#125;</span><br><span class="line">override val dataBase by lazy &#123; DataBase(this) &#125;</span><br><span class="line"> </span><br><span class="line">override fun onCreate(savedInstanceState: Bundle?) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_detail)</span><br><span class="line">    setSupportActionBar(toolbar)</span><br><span class="line">    dataBase.loadWhatever()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>find</code>方法属于<a href="https://github.com/Kotlin/anko" target="_blank" rel="external">Anko</a>库。但你可以更容易的做类似的事情：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inline fun &lt;reified T : View&gt; Activity.find(id: Int): T = findViewById(id) as T</span><br></pre></td></tr></table></figure>
+<h3 id="更多的lambdas，更美丽"><a href="#更多的lambdas，更美丽" class="headerlink" title="更多的lambdas，更美丽"></a>更多的lambdas，更美丽</h3><p>在Java中所有的事情都要创建对象。一个例子就是在创建一个完整的<code>Runnable</code>时的<code>postDelayed</code>。Kotlin的interoperability仅需要创建一个lambda，它的可读性好很多：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view.postDelayed(&#123; doWhatever() &#125;, 200)</span><br></pre></td></tr></table></figure>
+<p>如果你想创建一个线程并运行一些东西该怎么做呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Thread().run &#123; </span><br><span class="line">    // Running in a thread    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="“我恨AsyncTasks！！”。好了，那么就不用它们"><a href="#“我恨AsyncTasks！！”。好了，那么就不用它们" class="headerlink" title="“我恨AsyncTasks！！”。好了，那么就不用它们"></a>“我恨AsyncTasks！！”。好了，那么就不用它们</h3><p>感谢<a href="https://github.com/Kotlin/anko" target="_blank" rel="external">Anko</a>库，我们有一个小的DSL来处理后台线程任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">async() &#123;</span><br><span class="line">    // Do something in a secondary thread</span><br><span class="line">    uiThread &#123;</span><br><span class="line">        // Back to the main thread</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它也是上下文感知的，所以如果它在antivity中被调用，如果activity关闭了，<code>uiThread</code> 也就不会被调用了。</p>
+<h3 id="为什么处理集合是如此的困难？不再是了"><a href="#为什么处理集合是如此的困难？不再是了" class="headerlink" title="为什么处理集合是如此的困难？不再是了"></a>为什么处理集合是如此的困难？不再是了</h3><p>简单的回答就是缺少lambdas和功能操作。但Kotlin可以利用它们来工作，所以排序、转换、映射和过滤只是一个函数的调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">return parsedContacts.filter &#123; it.name != null &amp;&amp; it.image != null &#125;</span><br><span class="line">        .sortedBy &#123; it.name &#125;</span><br><span class="line">        .map &#123; Contact(it.id, it.name!!, it.image!!) &#125;</span><br></pre></td></tr></table></figure>
+<p>对于集合，你可以查看<a href="http://antonioleiva.com/collection-operations-kotlin/" target="_blank" rel="external">complete list of operations</a>。</p>
+<h3 id="操作重载：让你的想象力飞翔"><a href="#操作重载：让你的想象力飞翔" class="headerlink" title="操作重载：让你的想象力飞翔"></a>操作重载：让你的想象力飞翔</h3><p>谁说你不能像访问一个数组一样的访问<code>ViewGroup</code>中的view？这是不是很好？但一定很困难…当然不。你只需要用acts <a href="http://antonioleiva.com/operator-overloading-kotlin/" target="_blank" rel="external">as an operator</a>.创建一个扩展方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">operator fun ViewGroup.get(pos: Int): View = getChildAt(pos)</span><br></pre></td></tr></table></figure>
+<p>现在你可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val view = viewGroup[2]</span><br></pre></td></tr></table></figure>
+<p>你甚至可以创建一个返回view列表的扩展属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val ViewGroup.views: List&lt;View&gt;</span><br><span class="line">    get() = (0 until childCount).map &#123; getChildAt(it) &#125;</span><br></pre></td></tr></table></figure>
+<p>现在你可以直接访问view：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val views = viewGroup.views</span><br></pre></td></tr></table></figure>
+<h3 id="厌倦了这么多的getters-setters-toString-equals-…"><a href="#厌倦了这么多的getters-setters-toString-equals-…" class="headerlink" title="厌倦了这么多的getters, setters, toString(), equals()…?"></a>厌倦了这么多的getters, setters, toString(), equals()…?</h3><p>Kotlin中的数据类给你提供了这些所有。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data class Person(val name: String, val surname: String, val age: Int)</span><br></pre></td></tr></table></figure>
+<p>我们在这里做。</p>
+<h3 id="简单的方法启动activity"><a href="#简单的方法启动activity" class="headerlink" title="简单的方法启动activity"></a>简单的方法启动activity</h3><p>Anko也提供了一些好的方法可以不用创建intent、添加extras、调用方法…来启动另一个activity，所有的事情都可以用单独的一行代码做到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startActivity&lt;DetailActivity&gt;(&quot;id&quot; to 2, &quot;name&quot; to &quot;Kotlin&quot;)</span><br></pre></td></tr></table></figure>
+<p>这回创建一个带有extras的intent，extras的值是该方法接收的一对列表参数值定义的。</p>
+<h3 id="Android扩展，或者如何忘记findViewById"><a href="#Android扩展，或者如何忘记findViewById" class="headerlink" title="Android扩展，或者如何忘记findViewById"></a>Android扩展，或者如何忘记findViewById</h3><p>使用Kotlin的Android扩展，仅需要添加一个专门的import，插件将会给activity、fragment甚至一个view创建一组参数设置，因此你不必担心去申明或找到这些view。参数的名称将在导入的XML文件中定义。例如，在<code>RecyclerView</code> adapter里，<code>ViewHolder</code>里你可以这么做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import kotlinx.android.synthetic.main.item_contact.view.*</span><br><span class="line"> </span><br><span class="line">...</span><br><span class="line"> </span><br><span class="line">fun bindContact(contact: Contact) &#123;</span><br><span class="line">    itemView.name.text = contact.name</span><br><span class="line">    itemView.avatar.loadUrl(contact.image)</span><br><span class="line">    itemView.setOnClickListener &#123; listener(contact) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以更简洁。如果你多次使用同一个变量，你可以用标准库中的一些方法，例如<code>apply</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fun bindContact(contact: Contact) = itemView.apply &#123;</span><br><span class="line">    name.text = contact.name</span><br><span class="line">    avatar.loadUrl(contact.image)</span><br><span class="line">    setOnClickListener &#123; listener(contact) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="这个东西太好了，太值了！"><a href="#这个东西太好了，太值了！" class="headerlink" title="这个东西太好了，太值了！"></a>这个东西太好了，太值了！</h3><p>偷偷的看下Kotlin能为你做什么。很多事情仅是一个提高速度、帮助编写更清晰的代码，避免模版的语法糖果，最重要的是，让你感觉好像一个忍者。</p>
+<p>Kotlin有许多你想学习的更惊叹的特性。这个语言真的是很有乐趣并富有创造力的，它注重实效（仅是一组不可思议的功能）并且完全集成了Android开发。</p>
+<p>我推荐你去看一本<a href="http://antonioleiva.com/kotlin-android-developers-book/" target="_blank" rel="external">书</a>，现在就获得他吧。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/29/权限-第四篇/" rel="next" title="Android 权限 - 第四篇">
+                <i class="fa fa-chevron-left"></i> Android 权限 - 第四篇
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/29/Kotlin在Android上令人惊叹的技巧/"
+     data-title="Kotlin在Android上令人惊叹的技巧"
+     data-content=""
+     data-url="http://shenyansycn.github.io/2016/04/29/Kotlin在Android上令人惊叹的技巧/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/29/Kotlin在Android上令人惊叹的技巧/"
+           data-title="Kotlin在Android上令人惊叹的技巧" data-url="http://shenyansycn.github.io/2016/04/29/Kotlin在Android上令人惊叹的技巧/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/3362795?v=3&s=460"
+               alt="似衡" />
+          <p class="site-author-name" itemprop="name">似衡</p>
+          <p class="site-description motion-element" itemprop="description">财上平如水，人中直似衡</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shenyansycn" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在Android上我从哪里开始学习Kotlin？"><span class="nav-number">1.</span> <span class="nav-text">在Android上我从哪里开始学习Kotlin？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#展示这个技巧"><span class="nav-number">2.</span> <span class="nav-text">展示这个技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简洁和趣味的编写点击监听事件"><span class="nav-number">2.1.</span> <span class="nav-text">简洁和趣味的编写点击监听事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么layout要如此麻烦的inflate？再也不是了！"><span class="nav-number">2.2.</span> <span class="nav-text">为什么layout要如此麻烦的inflate？再也不是了！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ImageView-加载图片"><span class="nav-number">2.3.</span> <span class="nav-text">ImageView, 加载图片!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#令人厌恶的菜单switches…再也不了！"><span class="nav-number">2.4.</span> <span class="nav-text">令人厌恶的菜单switches…再也不了！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Snacks和toasts很像…-但更不好用"><span class="nav-number">2.5.</span> <span class="nav-text">Snacks和toasts很像… 但更不好用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现在我没有context…但谁关心呢？"><span class="nav-number">2.6.</span> <span class="nav-text">现在我没有context…但谁关心呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多的lambdas，更美丽"><span class="nav-number">2.7.</span> <span class="nav-text">更多的lambdas，更美丽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“我恨AsyncTasks！！”。好了，那么就不用它们"><span class="nav-number">2.8.</span> <span class="nav-text">“我恨AsyncTasks！！”。好了，那么就不用它们</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么处理集合是如此的困难？不再是了"><span class="nav-number">2.9.</span> <span class="nav-text">为什么处理集合是如此的困难？不再是了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作重载：让你的想象力飞翔"><span class="nav-number">2.10.</span> <span class="nav-text">操作重载：让你的想象力飞翔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#厌倦了这么多的getters-setters-toString-equals-…"><span class="nav-number">2.11.</span> <span class="nav-text">厌倦了这么多的getters, setters, toString(), equals()…?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的方法启动activity"><span class="nav-number">2.12.</span> <span class="nav-text">简单的方法启动activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android扩展，或者如何忘记findViewById"><span class="nav-number">2.13.</span> <span class="nav-text">Android扩展，或者如何忘记findViewById</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#这个东西太好了，太值了！"><span class="nav-number">2.14.</span> <span class="nav-text">这个东西太好了，太值了！</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">似衡</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shenyansycn"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
