@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中调试RxJava">
+<meta property="og:url" content="http://shenyansycn.github.io/2016/04/29/Android中调试RxJava/index.html">
+<meta property="og:site_name" content="Shenyansycn Blog">
+<meta property="og:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta property="og:image" content="http://fernandocejas.com/wp-content/uploads/2015/11/frodo_one.jpg">
+<meta property="og:updated_time" content="2016-04-29T08:25:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中调试RxJava">
+<meta name="twitter:description" content="此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的开源项目。">
+<meta name="twitter:image" content="http://fernandocejas.com/wp-content/uploads/2015/11/frodo_one.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android中调试RxJava | Shenyansycn Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shenyansycn Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Project Manager & Android Developer</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android中调试RxJava
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T16:21:38+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术文章翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章翻译</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/29/Android中调试RxJava/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/29/Android中调试RxJava/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>此文章来自参加的一个定期翻译国外Android优质的技术、开源库、软件架构设计、测试等文章的<a href="https://github.com/hehonghui/android-tech-frontier" target="_blank" rel="external">开源项目</a>。</p>
+<a id="more"></a>
+<blockquote>
+<ul>
+<li>原文链接 : <a href="http://fernandocejas.com/2015/11/05/debugging-rxjava-on-android/?utm_source=Android+Weekly&amp;utm_campaign=038d344835-Android_Weekly_178&amp;utm_medium=email&amp;utm_term=0_4eb677ad19-038d344835-337955857" target="_blank" rel="external">Debugging RxJava on Android</a></li>
+<li>原文作者 : <a href="http://fernandocejas.com/" target="_blank" rel="external">Fernando Cejas</a></li>
+<li>译文出自 : <a href="http://www.devtf.cn" target="_blank" rel="external">开发技术前线 www.devtf.cn</a></li>
+<li>译者 : <a href="https://github.com/shenyansycn" target="_blank" rel="external">shenyansycn</a> </li>
+</ul>
+</blockquote>
+<p><strong>调试</strong>是查找和分析bug的过程或者预防软件的正确操作出现问题<a href="https://en.wikipedia.org/wiki/Debugging" target="_blank" rel="external">Wikipedia</a>。</p>
+<p>当前调试不是一件容易的事情，我们在处理<strong>Android的异步操作</strong>时，这一切将变得更为困难。</p>
+<p>正如你可能知道的，在<a href="https://soundcloud.com/" target="_blank" rel="external">@SoundCloud</a>,<strong>Android开发</strong>的核心代码中我们大量的使用<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="external">RxJava</a>，因此在这篇文章我会轻松的带你走进如何调试Rx <a href="http://reactivex.io/documentation/observable.html" target="_blank" rel="external">Observables</a>和<a href="http://reactivex.io/RxJava/javadoc/rx/Subscriber.html" target="_blank" rel="external">Subscribers</a>。</p>
+<h2 id="热烈欢迎Frodo"><a href="#热烈欢迎Frodo" class="headerlink" title="热烈欢迎Frodo"></a>热烈欢迎Frodo</h2><p>让我们先介绍下<strong>Frodo</strong>，如果你已经看过<a href="https://www.youtube.com/watch?v=R16OHcZJTno" target="_blank" rel="external">Matthias Käppler talk at GOTO Conference</a>(如果你还没有看过，我强烈推荐)，你应该已经注意到了的<a href="https://github.com/android10/gandalf" target="_blank" rel="external">Gandalf</a><a href="https://youtu.be/R16OHcZJTno?t=2475" target="_blank" rel="external">(第41:15分钟)</a>。开始时我要说的是<a href="https://github.com/android10/gandalf" target="_blank" rel="external">Gandalf是我在<strong>Android中面向方面编程</strong>的失败尝试</a>，幸运的是在艰苦的工作和收到有益的反馈后，它成为了我在<a href="https://soundcloud.com/" target="_blank" rel="external">@SoundCloud</a>中使用的<strong>Android开发工具箱</strong>，然而我想要一个<strong>较小的只解决一个问题</strong>的工具，所以我决定提取<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="external">RxJava</a>的日志细节，我一只在努力，献身于<strong>Frodo</strong>。</p>
+<p><strong>Frodo</strong>仅是一个<strong>调试RxJava Observables 和 Subscribers的Android库</strong>(目前来看)，比如说成是<strong>Gandalf</strong>的小儿子或者兄弟。它的灵感产生于<a href="https://github.com/JakeWharton/hugo" target="_blank" rel="external">Jake Wharton’s Hugo库</a>库。</p>
+<p><img src="http://fernandocejas.com/wp-content/uploads/2015/11/frodo_one.jpg" alt="frodo_one"></p>
+<h2 id="调试RxJava"><a href="#调试RxJava" class="headerlink" title="调试RxJava"></a>调试RxJava</h2><p>首先，我假设你有<strong>RxJava</strong>和它的核心组件：<strong>Observables</strong> 和 <strong>Subscribers</strong>的基础知识。</p>
+<p><strong>调试是一个切入点</strong>，我们知道它是如何令人沮丧和痛苦的。此外，很多时候你为了写<strong>调试相关</strong>的代码（不属于业务逻辑的部分）而使得事情更复杂。特别是当涉及到<strong>异步代码执行</strong>。</p>
+<p><strong>Frodo就是为了避免编写用于调试RxJava对象的代码而出现的。它依赖Java注解和Gradle Plugin</strong>，程序Debug编译时会检测，它会将<strong>RxJava对象的相关信息</strong>输出到logcat。例如，即使是在生成release版的app时，<strong>在你的代码库中保留Frodo注解也是安全的</strong>。现在，让我们具体看看。</p>
+<h2 id="使用Frodo"><a href="#使用Frodo" class="headerlink" title="使用Frodo"></a>使用Frodo</h2><p>使用<strong>Frodo</strong>第一步是在我们Android项目中将<strong>Gradle Plugin</strong>修改为如下这样：</p>
+<p>build.gradle</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">  repositories &#123;</span><br><span class="line">    jcenter()</span><br><span class="line">  &#125;</span><br><span class="line">  dependencies &#123;</span><br><span class="line">    classpath <span class="string">'com.android.tools.build:gradle:1.3.1'</span></span><br><span class="line">    classpath <span class="string">"com.fernandocejas.frodo:frodo-plugin:0.8.1"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'com.android.application'</span></span><br><span class="line">apply plugin: <span class="string">'com.fernandocejas.frodo'</span></span><br></pre></td></tr></table></figure>
+<p>正如你看到的，我们在classpath中添加了<strong>“com.fernandocejas.frodo:frodo-plugin:0.8.1”</strong>然后我们声明了<strong>‘com.fernandocejas.frodo’</strong> plugin。这足够使用<strong>这个库提供的Java注解</strong>。</p>
+<h2 id="检验-RxLogObservable"><a href="#检验-RxLogObservable" class="headerlink" title="检验@RxLogObservable"></a>检验@RxLogObservable</h2><p><strong>Frodo第一个核心功能是通过Java注解@RxLogObservable 记录RxJava Observables日志</strong>。比方说我们有一个会产出<code>DummyClass</code>列表的<code>Observable</code>。</p>
+<p>ObservableSample.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObservableSample</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@RxLogObservable</span></span><br><span class="line">  <span class="keyword">public</span> Observable&lt;List&lt;MyDummyClass&gt;&gt; list() &#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.just(buildDummyList());</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> List&lt;MyDummyClass&gt; <span class="title">buildDummyList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Arrays.asList(<span class="keyword">new</span> MyDummyClass(<span class="string">"Batman"</span>), <span class="keyword">new</span> MyDummyClass(<span class="string">"Superman"</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MyDummyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    MyDummyClass(String name) &#123;</span><br><span class="line">      <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Name: "</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们订阅到我们的observable例子中：</p>
+<p>MyClass.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ObservableSample observableSample = <span class="keyword">new</span> ObservableSample();</span><br><span class="line">observableSample.list()</span><br><span class="line">  .subscribeOn(Schedulers.newThread())</span><br><span class="line">  .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">  .subscribe(<span class="keyword">new</span> Action1&lt;List&lt;ObservableSample.MyDummyClass&gt;&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(List&lt;ObservableSample.MyDummyClass&gt; myDummyClasses)</span> </span>&#123;</span><br><span class="line">      toastMessage(<span class="string">"onNext() List--&gt; "</span> + myDummyClasses.toString());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">编译并运行应用后，这是我们在logcat中看到的信息：</span><br><span class="line"></span><br><span class="line">LogcatShell</span><br></pre></td></tr></table></figure>
+<pre><code>ObservableSample  D  Frodo =&gt; [@Observable :: @InClass -&gt; ObservableSample :: @Method -&gt; list()]
+                  D  Frodo =&gt; [@Observable#list -&gt; onSubscribe() :: @SubscribeOn -&gt; RxNewThreadScheduler-3]
+                  D  Frodo =&gt; [@Observable#list -&gt; onNext() -&gt; [Name: Batman, Name: Superman]]
+                  D  Frodo =&gt; [@Observable#list -&gt; onCompleted()]
+                  D  Frodo =&gt; [@Observable#list -&gt; onTerminate() :: @Emitted -&gt; 1 element :: @Time -&gt; 0 ms]
+                  D  Frodo =&gt; [@Observable#list -&gt; onUnsubscribe() :: @ObserveOn -&gt; main]
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**主要意思是在ObservableSample类中我们订阅了一个返回Observable的list()方法**。然后通过带注释的Observable我们获得了关于被发送的元素、执行方法和事件被触发的信息。</span><br><span class="line"></span><br><span class="line">## 检验@RxLogSubscriber</span><br><span class="line"></span><br><span class="line">**现在让我们看下@RxLogSubscriber能做什么。**</span><br><span class="line"></span><br><span class="line">下面例子，让我们创建一个用**@RxLogSubscriber**做注释的**RxJava**虚拟Subscriber。</span><br><span class="line"></span><br><span class="line">MySubscriberBackpressure.java</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">@RxLogSubscriber</span><br><span class="line">public class MySubscriberBackpressure extends Subscriber&lt;Integer&gt; &#123;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public void onStart() &#123;</span><br><span class="line">    request(16);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public void onNext(Integer value) &#123;</span><br><span class="line">    //empty</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public void onError(Throwable throwable) &#123;</span><br><span class="line">    //empty</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public void onCompleted() &#123;</span><br><span class="line">    if (!isUnsubscribed()) &#123;</span><br><span class="line">      unsubscribe();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们不提这个Subscriber的名字<a href="https://github.com/ReactiveX/RxJava/wiki/Backpressure" target="_blank" rel="external">backpressure</a>，因为这个话题得说一整篇文章。只要知道这个Subscriber仅请求16个元素和<strong>onNext()</strong>方法被调用时什么都不会做。可是，<strong>我仍然想看到当被调用时会发生什么。</strong></p>
+<p>ObservableSample.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObservableSample</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Observable&lt;Integer&gt; <span class="title">numbersBackpressure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;Integer&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> Integer&gt; subscriber)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (!subscriber.isUnsubscribed()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">              subscriber.onNext(i);</span><br><span class="line">            &#125;</span><br><span class="line">            subscriber.onCompleted();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          subscriber.onError(e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里订阅到SampleObservable：</p>
+<p>MyClass.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ObservableSample observableSample = <span class="keyword">new</span> ObservableSample();</span><br><span class="line">observableSample.numbersBackpressure()</span><br><span class="line">  .onBackpressureDrop()</span><br><span class="line">  .subscribeOn(Schedulers.newThread())</span><br><span class="line">  .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">  .subscribe(<span class="keyword">new</span> MySubscriberBackpressure());</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">当我们再次编译并运行程序后，这是在logcat得输出信息：</span><br><span class="line"></span><br><span class="line">LogcatShell</span><br></pre></td></tr></table></figure>
+<p>SubscriberBackpressure  D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onStart()]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; @Requested -&gt; 40 elements]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 1 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 2 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 3 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 4 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 5 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 6 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 7 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 8 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 9 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 10 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 11 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 12 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 13 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 14 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 15 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onNext() -&gt; 16 :: @ObserveOn -&gt; main]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; onCompleted() :: @Received -&gt; 16 elements :: @Time -&gt; 3 ms]<br>                        D  Frodo =&gt; [@Subscriber :: MySubscriberBackpressure -&gt; unSubscribe()]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里得信息包括每一个被接收的item，元素的数量、调用函数，执行事件和触发事件。</span><br><span class="line"></span><br><span class="line">正如你所看到了在[backpressure](https://github.com/ReactiveX/RxJava/wiki/Backpressure)中有用的信息，或看到哪个线程发出的item又或者当我们想是否Subscriber被成功订阅，从而避免了内存泄漏。</span><br><span class="line"></span><br><span class="line">## Frodo高级选项</span><br><span class="line"></span><br><span class="line">在这篇文章中，我没有说明这个库内部工作的细节，如果你感兴趣的话，可以看下我一年前写的[一篇文章](http://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/)，它里面包括我同样使用Frodo的一个例子。</span><br><span class="line"></span><br><span class="line">[你也可以浏览我已经准备好的一个描述](https://speakerdeck.com/android10/android-aspect-oriented-programming)关于[AOP和这个库](https://speakerdeck.com/android10/android-aspect-oriented-programming)的介绍，更深入的可以看源码。</span><br><span class="line"></span><br><span class="line">## 免责说明：初期</span><br><span class="line"></span><br><span class="line">**Frodo刚刚诞生，未来还有很长的路。它仍然处在一个非常早期的阶段，所以你可能会发现问题或者可以提升的地方。**</span><br><span class="line"></span><br><span class="line">实际上，开源的一个主要原因是**在社区中收到反馈或建议**完善自己，让它更好用。我不得不非常激动的说，我已经在3个不同的项目中使用并没有发现很多问题（更多信息可以查看下边的已知问题）。</span><br><span class="line"></span><br><span class="line">## 已知问题</span><br><span class="line"></span><br><span class="line">**目前为止知道的一个已知问题**：因为**Frodo**依赖**Gradle Plugin**（正如之前说的）检测**Android Debug编译版本和植入代码，如果你做为Android Library项目使用**，当你编译应用（即使是debug编译类型），官方的Android Gradle Plugin总是会编译Android Library项目的release版本，这样，**这就阻止了Frodo在注释的方法／类上植入代码**。当然这不会引起你的应用崩溃但在logcat中你看不到任何输出。既然你不希望在商用的release版本中到处都是暴露重要信息的log日志，这里有一个应对方案，你使用的时候要注意。</span><br><span class="line">在你项目的Android Library module的**build.gradle**文件中添加下边标记：</span><br><span class="line">**(编者注：新版本的Androdi Studio的library module也可以设置为不混淆了。)**</span><br><span class="line"></span><br><span class="line">build.gradle</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">android &#123;</span><br><span class="line">  defaultPublishConfig &quot;debug&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Frodo应用例子"><a href="#Frodo应用例子" class="headerlink" title="Frodo应用例子"></a>Frodo应用例子</h2><p>这个<a href="https://github.com/android10/frodo" target="_blank" rel="external">repository</a>包括一个<strong>应用例子</strong>，你可以看到不同情况下的使用实例，比如<strong>Observable的错误和其他log信息</strong>。我也在我的<a href="https://github.com/android10/Android-CleanArchitecture" target="_blank" rel="external">Android Clean Architecture repo</a>使用了<strong>Frodo</strong>，你可以去看看。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>这是我在这边文章中尽力提供的，希望你能找到Frodo的好处</strong>。</p>
+<p>最新的版本你可以在这里找到：<br><a href="https://github.com/android10/frodo" target="_blank" rel="external">https://github.com/android10/frodo</a></p>
+<p>一如既往，欢迎任何反馈，也欢迎贡献，再会。</p>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
+<ul>
+<li><a href="https://github.com/android10/frodo" target="_blank" rel="external">Frodo Project website</a></li>
+<li><a href="http://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/" target="_blank" rel="external">Aspect Oriented Programming in Android</a></li>
+<li><a href="https://speakerdeck.com/android10/android-aspect-oriented-programming" target="_blank" rel="external">AO Programming and Frodo Presentation</a></li>
+<li><a href="https://www.youtube.com/watch?v=R16OHcZJTno" target="_blank" rel="external">Matthias Käppler Talk at GOTO Conference: Going Reactive</a></li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/29/使用buildSrc-Gradle项目和Codemodel生成java代码/" rel="next" title="使用buildSrc Gradle项目和Codemodel生成java代码">
+                <i class="fa fa-chevron-left"></i> 使用buildSrc Gradle项目和Codemodel生成java代码
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/29/Android中调试RxJava/"
+     data-title="Android中调试RxJava"
+     data-content=""
+     data-url="http://shenyansycn.github.io/2016/04/29/Android中调试RxJava/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/29/Android中调试RxJava/"
+           data-title="Android中调试RxJava" data-url="http://shenyansycn.github.io/2016/04/29/Android中调试RxJava/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/3362795?v=3&s=460"
+               alt="似衡" />
+          <p class="site-author-name" itemprop="name">似衡</p>
+          <p class="site-description motion-element" itemprop="description">财上平如水，人中直似衡</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shenyansycn" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#热烈欢迎Frodo"><span class="nav-number">1.</span> <span class="nav-text">热烈欢迎Frodo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试RxJava"><span class="nav-number">2.</span> <span class="nav-text">调试RxJava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Frodo"><span class="nav-number">3.</span> <span class="nav-text">使用Frodo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检验-RxLogObservable"><span class="nav-number">4.</span> <span class="nav-text">检验@RxLogObservable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frodo应用例子"><span class="nav-number">5.</span> <span class="nav-text">Frodo应用例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关链接"><span class="nav-number">7.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">似衡</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shenyansycn"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
